@@ -1,69 +1,217 @@
-import Image from "next/image";
+"use client";
+
+import { useState } from "react";
+import { Calculator, RotateCcw } from "lucide-react";
 
 export default function Home() {
+  const [single, setSingle] = useState("");
+  const [double, setDouble] = useState("");
+  const [copies, setCopies] = useState("1");
+
+  const [singleRate, setSingleRate] = useState("1");
+  const [doubleRate, setDoubleRate] = useState("1.5");
+
+  const singlePages = Number(single) || 0;
+  const doubleSheets = Number(double) || 0;
+  const copyCount = Number(copies) || 1;
+
+  const singlePrice = Number(singleRate) || 0;
+  const doublePrice = Number(doubleRate) || 0;
+
+  const singleCost = singlePages * singlePrice;
+  const doubleCost = doubleSheets * doublePrice;
+
+  const total = (singleCost + doubleCost) * copyCount;
+
+  function reset() {
+    setSingle("");
+    setDouble("");
+    setCopies("1");
+    setSingleRate("1");
+    setDoubleRate("1.5");
+  }
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <main className="min-h-screen bg-zinc-100 px-4 py-8 text-zinc-900">
+      <div className="mx-auto max-w-md">
+
+        {/* Header */}
+        <div className="mb-8 text-center">
+          <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-2xl bg-zinc-900 text-white">
+            <Calculator size={24} />
+          </div>
+
+          <h1 className="text-3xl font-bold">PrintPrice</h1>
+
+          <p className="mt-1 text-sm text-zinc-500">
+            Know exactly what you should pay.
           </p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
+
+        {/* Calculator */}
+        <section className="rounded-3xl bg-white p-5 shadow-sm ring-1 ring-zinc-200">
+
+          <h2 className="mb-5 text-lg font-semibold">
+            Print details
+          </h2>
+
+          <div className="space-y-4">
+
+            <Input
+              label="Single-sided pages"
+              value={single}
+              onChange={setSingle}
+              placeholder="e.g. 20"
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+
+            <Input
+              label="Double-sided sheets"
+              value={double}
+              onChange={setDouble}
+              placeholder="e.g. 40"
+            />
+
+            <Input
+              label="Copies"
+              value={copies}
+              onChange={setCopies}
+              placeholder="1"
+            />
+
+          </div>
+
+          {/* Rates */}
+          <h2 className="mb-4 mt-7 text-lg font-semibold">
+            Printing rates
+          </h2>
+
+          <div className="grid grid-cols-2 gap-3">
+
+            <Input
+              label="Single side ₹"
+              value={singleRate}
+              onChange={setSingleRate}
+              placeholder="1"
+              step="0.5"
+            />
+
+            <Input
+              label="Double side ₹"
+              value={doubleRate}
+              onChange={setDoubleRate}
+              placeholder="1.5"
+              step="0.5"
+            />
+
+          </div>
+
+          {/* Clear */}
+          <button
+            onClick={reset}
+            className="mt-5 flex w-full items-center justify-center gap-2 rounded-xl border border-zinc-200 py-3 text-sm font-medium text-zinc-600 transition hover:bg-zinc-50"
           >
-            Documentation
-          </a>
-        </div>
-      </main>
+            <RotateCcw size={16} />
+            Clear
+          </button>
+
+        </section>
+
+        {/* Result */}
+        <section className="mt-4 rounded-3xl bg-zinc-900 p-6 text-white">
+
+          <p className="text-sm text-zinc-400">
+            You should pay
+          </p>
+
+          <div className="mt-1 text-5xl font-bold tracking-tight">
+            ₹{total.toFixed(2).replace(".00", "")}
+          </div>
+
+          {/* Breakdown */}
+          <div className="mt-6 space-y-3 border-t border-zinc-700 pt-4 text-sm">
+
+            {singlePages > 0 && (
+              <Row
+                label={`${singlePages} single-sided × ₹${singlePrice}`}
+                value={`₹${singleCost}`}
+              />
+            )}
+
+            {doubleSheets > 0 && (
+              <Row
+                label={`${doubleSheets} double-sided × ₹${doublePrice}`}
+                value={`₹${doubleCost}`}
+              />
+            )}
+
+            {copyCount > 1 && (
+              <Row
+                label={`Copies`}
+                value={`${copyCount} ×`}
+              />
+            )}
+
+          </div>
+
+        </section>
+
+        <p className="mt-6 text-center text-xs text-zinc-400">
+          Nothing is saved. Every calculation starts fresh.
+        </p>
+
+      </div>
+    </main>
+  );
+}
+
+
+type InputProps = {
+  label: string;
+  value: string;
+  onChange: (value: string) => void;
+  placeholder: string;
+  step?: string;
+};
+
+function Input({
+  label,
+  value,
+  onChange,
+  placeholder,
+  step = "1",
+}: InputProps) {
+  return (
+    <label className="block">
+
+      <span className="mb-2 block text-sm font-medium text-zinc-700">
+        {label}
+      </span>
+
+      <input
+        type="number"
+        min="0"
+        step={step}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder={placeholder}
+        className="w-full rounded-xl border border-zinc-200 bg-zinc-50 px-4 py-3 outline-none transition focus:border-zinc-900 focus:bg-white"
+      />
+
+    </label>
+  );
+}
+
+
+function Row({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="flex items-center justify-between gap-4">
+      <span className="text-zinc-400">
+        {label}
+      </span>
+
+      <span className="font-semibold">
+        {value}
+      </span>
     </div>
   );
 }
